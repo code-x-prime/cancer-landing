@@ -30,13 +30,27 @@ export async function POST(req) {
 
         // Extract fields
         const name = formData.get("name");
+        const gender = formData.get("gender");
+        const dob = formData.get("dob");
         const country = formData.get("country");
+        const city = formData.get("city") || "Not specified";
         const whatsapp = formData.get("whatsapp");
         const email = formData.get("email");
-        const cancerType = formData.get("cancerType");
-        const stage = formData.get("stage") || "Not specified";
-        const timeline = formData.get("timeline") || "Not specified";
-        const message = formData.get("message") || "No additional message";
+
+        // Medical Details
+        const concern = formData.get("concern");
+        const diagnosis = formData.get("diagnosis") || "Not specified";
+        const symptoms = formData.get("symptoms");
+        const duration = formData.get("duration") || "Not specified";
+        const previousTreatment = formData.get("previousTreatment");
+        const treatmentDetails = formData.get("treatmentDetails") || "None";
+        const existingConditions = formData.get("existingConditions") || "None";
+
+        // Preferences
+        const preferredHospital = formData.get("preferredHospital") || "Any Top Hospital";
+        const budget = formData.get("budget") || "Not specified";
+        const travelReadiness = formData.get("travelReadiness") || "Not specified";
+
         const file = formData.get("file");
 
         let fileUrl = "";
@@ -66,21 +80,41 @@ export async function POST(req) {
         const adminMailOptions = {
             from: `Panacea Medcare <${process.env.FROM_EMAIL}>`,
             to: "care@panaceamedcare.com", // Admin email
-            subject: `New Lead: ${name} - ${cancerType} (${country})`,
+            subject: `AI Pre-Screening: ${name} (${country}) - ${concern}`,
             html: `
-        <div style="font-family: Arial, sans-serif; color: #333;">
-          <h2 style="color: #0E7490;">New Cancer Case Review Request</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Country:</strong> ${country}</p>
-          <p><strong>WhatsApp:</strong> <a href="https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}">${whatsapp}</a></p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Cancer Type:</strong> ${cancerType}</p>
-          <p><strong>Stage:</strong> ${stage}</p>
-          <p><strong>Timeline:</strong> ${timeline}</p>
-          <p><strong>Message:</strong> ${message}</p>
-          <hr />
-          <h3>Medical Report:</h3>
-          ${fileUrl ? `<p><a href="${fileUrl}" style="background-color: #0E7490; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View Uploaded Report</a></p><p style="font-size: 12px; color: #666;">If the button doesn't work, copy this link: ${fileUrl}</p>` : "<p>No file uploaded.</p>"}
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+          <div style="background-color: #0E7490; padding: 20px; color: white;">
+            <h2 style="margin: 0;">New AI Pre-Screening Request</h2>
+          </div>
+          
+          <div style="padding: 20px;">
+            <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px;">Patient Details</h3>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Gender:</strong> ${gender} | <strong>DOB:</strong> ${dob}</p>
+            <p><strong>Location:</strong> ${city}, ${country}</p>
+            <p><strong>WhatsApp:</strong> <a href="https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}">${whatsapp}</a></p>
+            <p><strong>Email:</strong> ${email}</p>
+
+            <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px; margin-top: 20px;">Medical Condition</h3>
+            <p><strong>Primary Concern:</strong> ${concern}</p>
+            <p><strong>Specific Diagnosis:</strong> ${diagnosis}</p>
+            <p><strong>Symptoms:</strong> ${symptoms}</p>
+            <p><strong>Duration:</strong> ${duration}</p>
+            <p><strong>Previous Treatment:</strong> ${previousTreatment}</p>
+            <p><strong>Treatment Details:</strong> ${treatmentDetails}</p>
+            <p><strong>Existing Conditions:</strong> ${existingConditions}</p>
+
+            <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px; margin-top: 20px;">Preferences</h3>
+            <p><strong>Preferred Hospital:</strong> ${preferredHospital}</p>
+            <p><strong>Budget Range:</strong> ${budget}</p>
+            <p><strong>Travel Readiness:</strong> ${travelReadiness}</p>
+
+            <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px; margin-top: 20px;">Medical Report</h3>
+            ${fileUrl ? `<p><a href="${fileUrl}" style="display: inline-block; background-color: #0E7490; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">View Uploaded Report</a></p><p style="font-size: 12px; color: #666; word-break: break-all;">Link: ${fileUrl}</p>` : "<p>No file uploaded.</p>"}
+          </div>
+          <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #888;">
+            Generated by Panacea Medcare AI Pre-Screening System
+          </div>
         </div>
       `,
         };
@@ -89,17 +123,36 @@ export async function POST(req) {
         const userMailOptions = {
             from: `Panacea Medcare <${process.env.FROM_EMAIL}>`,
             to: email,
-            subject: "We have received your medical reports - Panacea Medcare",
+            subject: "AI Pre-Screening in Progress - Panacea Medcare",
             html: `
-        <div style="font-family: Arial, sans-serif; color: #333;">
-          <h2 style="color: #0E7490;">Thank you for contacting Panacea Medcare</h2>
-          <p>Dear ${name},</p>
-          <p>We have successfully received your medical reports for review.</p>
-          <p>Our team of senior oncologists will review your case, and we will get back to you with a preliminary treatment plan and cost estimate within <strong>24–48 hours</strong>.</p>
-          <p>If you have any urgent queries, you can reach us directly on WhatsApp on <a href="https://wa.me/919958800961" style="color: #0E7490;">+91 995 880 0961</a>.</p>
-          <br />
-          <p>Best Regards,</p>
-          <p><strong>Patient Care Team</strong><br/>Panacea Medcare</p>
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+          <div style="background-color: #0E7490; padding: 20px; color: white; text-align: center;">
+            <h2 style="margin: 0;">AI Pre-Screening Started</h2>
+          </div>
+          <div style="padding: 30px;">
+            <p>Dear <strong>${name}</strong>,</p>
+            <p>Thank you for submitting your details for AI Pre-Screening.</p>
+            
+            <div style="background-color: #f0fdfa; border-left: 4px solid #0E7490; padding: 15px; margin: 20px 0;">
+              <p style="margin: 0; color: #0E7490; font-weight: bold;">Your case is now being analyzed.</p>
+            </div>
+
+            <p><strong>What Happens Next?</strong></p>
+            <ul>
+              <li>Our AI system is structuring your medical data.</li>
+              <li>A senior oncologist will review the AI insights for accuracy.</li>
+              <li>You will receive your <strong>Preliminary Assessment Report</strong> within 2 hours (during business hours) or by the next morning.</li>
+            </ul>
+
+            <p>If you have urgent questions, you can reply to this email or chat with us on WhatsApp:</p>
+            <p style="text-align: center; margin-top: 20px;">
+              <a href="https://wa.me/919958800961" style="background-color: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 25px; font-weight: bold;">Chat on WhatsApp</a>
+            </p>
+          </div>
+          <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #888;">
+            Panacea Medcare | New Delhi, India<br/>
+            <a href="https://panaceamedcare.com" style="color: #666;">www.panaceamedcare.com</a>
+          </div>
         </div>
       `,
         };
@@ -117,3 +170,4 @@ export async function POST(req) {
         return NextResponse.json({ success: false, error: "Failed to submit lead" }, { status: 500 });
     }
 }
+
