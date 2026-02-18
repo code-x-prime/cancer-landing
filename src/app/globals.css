@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 196 78% 15%; /* Dark Teal-Grey */
+
+    --card: 0 0% 100%;
+    --card-foreground: 196 78% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 196 78% 15%;
+
+    --primary: 189 79% 32%; /* Teal #0E7490 */
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 175 80% 97%; /* Light Teal Tint */
+    --secondary-foreground: 189 79% 32%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 25 95% 53%; /* Orange #F97316 */
+    --accent-foreground: 0 0% 98%;
+
+    --whatsapp: 142 69% 49%; /* WhatsApp #25D366 */
+    --whatsapp-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 189 79% 32%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .gradient-primary {
+    background: linear-gradient(135deg, #0E7490 0%, #0A4F6B 100%);
+  }
+  
+  .gradient-hero {
+    background: linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%);
+  }
+  
+  .glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+  }
+
+  .animate-scroll {
+    animation: scroll 30s linear infinite;
+  }
+
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
