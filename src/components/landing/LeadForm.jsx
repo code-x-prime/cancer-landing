@@ -101,7 +101,7 @@ const LeadForm = () => {
   }
 
   return (
-    <div className="glass rounded-2xl p-6 sm:p-8 shadow-2xl">
+    <div className="glass rounded-2xl p-4 sm:p-8 shadow-2xl">
       <div className="text-center mb-6">
         <h3 className="text-lg font-bold text-foreground">Get a Free Cancer Case Review</h3>
         <p className="text-sm text-accent font-semibold">(24–48 Hours Response)</p>
@@ -183,8 +183,8 @@ const LeadForm = () => {
         <div>
           <Label className="text-sm font-medium">Upload Medical Reports *</Label>
           <label className="mt-1 flex items-center gap-3 p-3 border-2 border-dashed border-primary/30 rounded-lg cursor-pointer hover:border-primary/60 transition-colors bg-secondary/50">
-            <Upload size={20} className="text-primary" />
-            <span className="text-sm text-muted-foreground">{fileName || "Click to upload reports (PDF, JPG, PNG)"}</span>
+            <Upload size={20} className="text-primary flex-shrink-0" />
+            <span className="text-sm text-muted-foreground flex-1 min-w-0 truncate">{fileName || "Click to upload reports (PDF, JPG, PNG)"}</span>
             <input
               type="file"
               className="hidden"
