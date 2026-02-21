@@ -6,7 +6,7 @@ const doctors = [
   {
     name: "Dr. Puneet Gupta",
     title: "Chairman – Oncology Services",
-    image: "/doctor/puneet-gupta.png",
+    image: "/doctor/puneet-gupta.webp",
     link: "https://panaceamedcare.com/doctors/puneet-gupta",
   },
   {
@@ -42,7 +42,6 @@ const DoctorsCarousel = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  // Triple the items to ensure smooth infinite loop and enough content for wide screens
   const allDoctors = [...doctors, ...doctors, ...doctors];
 
   useEffect(() => {
@@ -110,7 +109,7 @@ const DoctorsCarousel = () => {
   };
 
   return (
-    <div className="w-full pt-6 pb-2">
+    <div className="w-full max-w-full overflow-hidden pt-6 pb-2">
       <div className="flex items-center gap-3 mb-5 px-1">
         <div className="h-px flex-1 bg-border/40"></div>
         <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -125,7 +124,7 @@ const DoctorsCarousel = () => {
       <div className="relative group overflow-hidden">
         <div 
           ref={scrollRef}
-          className="flex overflow-x-hidden gap-4 cursor-grab active:cursor-grabbing select-none"
+          className="flex overflow-x-hidden gap-3 cursor-grab active:cursor-grabbing select-none"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => { setIsPaused(false); setIsDragging(false); }}
           onMouseDown={handleMouseDown}
@@ -142,13 +141,13 @@ const DoctorsCarousel = () => {
               target="_blank"
               rel="noopener noreferrer"
               draggable="false"
-              className="group/card flex-shrink-0 w-[250px] rounded overflow-hidden bg-white border border-border/60 shadow-lg hover:shadow-xl hover:border-primary/40 transition-all mb-4"
+              className="group/card flex-shrink-0 w-[130px] lg:w-[250px] rounded overflow-hidden bg-white border border-border/60 shadow-lg hover:shadow-xl hover:border-primary/40 transition-all mb-4"
               onClick={(e) => {
                 // Prevent click if we were just dragging
                 if (isDragging) e.preventDefault();
               }}
             >
-              <div className="relative w-full aspect-[9/16] overflow-hidden bg-gradient-to-br from-primary/10 to-secondary pointer-events-none">
+              <div className="relative w-full aspect-[3/4] lg:aspect-[9/16] overflow-hidden bg-gradient-to-br from-primary/10 to-secondary pointer-events-none">
                 <Image
                   src={doc.image}
                   alt={doc.name}

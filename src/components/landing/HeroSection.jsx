@@ -20,7 +20,7 @@ const HeroSection = () => {
         </div>
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-10 xl:gap-16 items-start">
           {/* Left Content */}
-          <div className="order-1 lg:order-1 space-y-5 lg:space-y-6">
+          <div className="order-1 lg:order-1 space-y-5 lg:space-y-6 min-w-0">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-xs lg:text-sm font-medium">
               <Shield size={14} />
               Serving patients from Nigeria, Kenya, Ethiopia, Ghana, Tanzania &amp; across Africa
@@ -44,7 +44,7 @@ const HeroSection = () => {
               <span>AI-assisted medical case pre-screening for faster specialist review</span>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2 w-fit">
               <Button
                 onClick={scrollToForm}
                 size="lg"
