@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 const docs = [
-  { icon: "/Recent-Medical-report.svg", name: "Recent Medical reports (PDF or images)", desc: "Lab reports, blood work, pathology results.", bg: "bg-teal-100", border: "border-teal-400" },
-  { icon: "/Biopsy-histopathology-report.svg", name: "Biopsy / histopathology report", desc: "If available — critical for diagnosis accuracy.", bg: "bg-blue-100", border: "border-blue-400" },
-  { icon: "/ct-mri-scans.svg", name: "CT / MRI / PET scans", desc: "Imaging helps oncologists assess cancer stage.", bg: "bg-purple-100", border: "border-purple-400" },
-  { icon: "/Passport-copy.svg", name: "Passport copy", desc: "Required for medical visa documentation.", bg: "bg-orange-100", border: "border-orange-400" },
+  { icon: "/Recent-Medical-report.svg", name: "Recent Medical reports (PDF or images)", desc: "Lab reports, blood work, pathology results.", bg: "bg-teal-200", cardBg: "bg-gradient-to-br from-teal-50 to-cyan-100 border-t-4 border-teal-400" },
+  { icon: "/Biopsy-histopathology-report.svg", name: "Biopsy / histopathology report", desc: "If available — critical for diagnosis accuracy.", bg: "bg-blue-200", cardBg: "bg-gradient-to-br from-blue-50 to-indigo-100 border-t-4 border-blue-400" },
+  { icon: "/ct-mri-scans.svg", name: "CT / MRI / PET scans", desc: "Imaging helps oncologists assess cancer stage.", bg: "bg-purple-200", cardBg: "bg-gradient-to-br from-purple-50 to-violet-100 border-t-4 border-purple-400" },
+  { icon: "/Passport-copy.svg", name: "Passport copy", desc: "Required for medical visa documentation.", bg: "bg-orange-200", cardBg: "bg-gradient-to-br from-orange-50 to-amber-100 border-t-4 border-orange-400" },
 ];
 
 const DocumentsSection = () => (
@@ -22,13 +22,13 @@ const DocumentsSection = () => (
 
       <div className="grid sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
         {docs.map((d, i) => (
-          <div key={i} className={`flex items-start gap-5 p-7 bg-white rounded-2xl border-t-4 ${d.border} shadow-md hover:shadow-xl hover:-translate-y-1 transition-all group`}>
+          <div key={i} className={`flex items-start gap-5 p-7 ${d.cardBg} rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-all group`}>
             <div className={`w-16 h-16 flex-shrink-0 rounded-2xl ${d.bg} flex items-center justify-center transition-transform group-hover:scale-110`}>
               <Image src={d.icon} alt={d.name} width={40} height={40} className="object-contain" />
             </div>
             <div className="pt-1">
-              <span className="font-extrabold text-foreground block text-base">{d.name}</span>
-              <span className="text-sm text-muted-foreground mt-0.5 block">{d.desc}</span>
+              <span className="font-extrabold text-foreground block text-lg">{d.name}</span>
+              <span className="text-base text-muted-foreground mt-0.5 block">{d.desc}</span>
             </div>
           </div>
         ))}

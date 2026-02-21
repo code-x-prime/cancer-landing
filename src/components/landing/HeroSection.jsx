@@ -20,10 +20,10 @@ const HeroSection = () => {
         </div>
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-10 xl:gap-16 items-start">
           {/* Left Content */}
-          <div className="order-2 lg:order-1 space-y-5 lg:space-y-6">
+          <div className="order-1 lg:order-1 space-y-5 lg:space-y-6">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 lg:px-4 lg:py-1.5 rounded-full text-xs lg:text-sm font-medium">
               <Shield size={14} />
-              Serving patients from Nigeria, Kenya, Ethiopia, Ghana, Tanzania & across Africa
+              Serving patients from Nigeria, Kenya, Ethiopia, Ghana, Tanzania &amp; across Africa
             </div>
 
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-extrabold text-foreground leading-tight">
@@ -67,7 +67,7 @@ const HeroSection = () => {
           </div>
 
           {/* Right Form */}
-          <div className="order-1 lg:order-2 lg:sticky lg:top-24" id="lead-form">
+          <div className="order-2 lg:order-2 lg:sticky lg:top-24" id="lead-form">
             <LeadForm />
           </div>
         </div>

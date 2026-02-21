@@ -3,10 +3,10 @@
 import Image from "next/image";
 
 const steps = [
-  { icon: "/medical-reports.svg", title: "Submit your medical reports securely", desc: "(Diagnosis, biopsy, scans if available)", color: "from-teal-500 to-cyan-600", bg: "bg-teal-50", border: "border-teal-400" },
-  { icon: "/AI-assisted-pre-screening.svg", title: "AI-assisted case pre-screening", desc: "Your case is organised and matched to the most relevant cancer specialists", color: "from-blue-500 to-indigo-600", bg: "bg-blue-50", border: "border-blue-400" },
-  { icon: "/senior-oncologists-review-case.svg", title: "Senior oncologists review your case", desc: "Doctors recommend treatment options and estimated costs", color: "from-purple-500 to-violet-600", bg: "bg-purple-50", border: "border-purple-400" },
-  { icon: "/End-to-end-support.svg", title: "End-to-end support by Panacea Medcare", desc: "Medical visa, hospital coordination, travel & treatment scheduling", color: "from-orange-500 to-amber-500", bg: "bg-orange-50", border: "border-orange-400" },
+  { icon: "/medical-reports.svg", title: "Submit your medical reports securely", desc: "(Diagnosis, biopsy, scans if available)", color: "from-teal-500 to-cyan-600", bg: "bg-teal-100", border: "border-teal-400", cardBg: "bg-gradient-to-br from-teal-50 to-cyan-100 border-teal-300" },
+  { icon: "/AI-assisted-pre-screening.svg", title: "AI-assisted case pre-screening", desc: "Your case is organised and matched to the most relevant cancer specialists", color: "from-blue-500 to-indigo-600", bg: "bg-blue-100", border: "border-blue-400", cardBg: "bg-gradient-to-br from-blue-50 to-indigo-100 border-blue-300" },
+  { icon: "/senior-oncologists-review-case.svg", title: "Senior oncologists review your case", desc: "Doctors recommend treatment options and estimated costs", color: "from-purple-500 to-violet-600", bg: "bg-purple-100", border: "border-purple-400", cardBg: "bg-gradient-to-br from-purple-50 to-violet-100 border-purple-300" },
+  { icon: "/End-to-end-support.svg", title: "End-to-end support by Panacea Medcare", desc: "Medical visa, hospital coordination, travel & treatment scheduling", color: "from-orange-500 to-amber-500", bg: "bg-orange-100", border: "border-orange-400", cardBg: "bg-gradient-to-br from-orange-50 to-amber-100 border-orange-300" },
 ];
 
 const ProcessSection = () => (
@@ -27,15 +27,15 @@ const ProcessSection = () => (
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {steps.map((step, i) => (
-          <div key={i} className={`relative bg-white rounded-2xl p-8 shadow-lg border-t-4 ${step.border} hover:shadow-2xl hover:-translate-y-2 transition-all text-center group`}>
+          <div key={i} className={`relative ${step.cardBg} rounded-2xl p-8 shadow-lg border hover:shadow-2xl hover:-translate-y-2 transition-all text-center group`}>
             <div className={`absolute -top-4 -left-4 w-10 h-10 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white text-base font-extrabold shadow-lg`}>
               {i + 1}
             </div>
             <div className={`w-20 h-20 mx-auto mb-5 rounded-2xl ${step.bg} flex items-center justify-center transition-transform group-hover:scale-110`}>
               <Image src={step.icon} alt={step.title} width={52} height={52} className="object-contain" />
             </div>
-            <h3 className="font-extrabold text-foreground mb-2 text-base leading-snug">{step.title}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
+            <h3 className="font-extrabold text-foreground mb-2 text-xl leading-snug">{step.title}</h3>
+            <p className="text-base text-muted-foreground leading-relaxed">{step.desc}</p>
           </div>
         ))}
       </div>

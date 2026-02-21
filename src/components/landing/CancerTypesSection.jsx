@@ -1,15 +1,14 @@
 "use client";
-
 import Image from "next/image";
 
 const types = [
-  { icon: "/Breast-Cancer.svg", name: "Breast Cancer", bg: "bg-pink-100", border: "border-pink-300 hover:border-pink-500" },
-  { icon: "/Prostate-Cancer.svg", name: "Prostate Cancer", bg: "bg-blue-100", border: "border-blue-300 hover:border-blue-500" },
-  { icon: "/Colorectal-Cancer.svg", name: "Colorectal Cancer", bg: "bg-orange-100", border: "border-orange-300 hover:border-orange-500" },
-  { icon: "/Cervical-Cancer.svg", name: "Cervical Cancer", bg: "bg-purple-100", border: "border-purple-300 hover:border-purple-500" },
-  { icon: "/Lung-Cancer.svg", name: "Lung Cancer", bg: "bg-teal-100", border: "border-teal-300 hover:border-teal-500" },
-  { icon: "/Blood-Cancers.svg", name: "Blood Cancers (Leukaemia, Lymphoma)", bg: "bg-red-100", border: "border-red-300 hover:border-red-500" },
-  { icon: "/Ovarian-Gynaecological-Cancers.svg", name: "Ovarian & Other Gynaecological Cancers", bg: "bg-indigo-100", border: "border-indigo-300 hover:border-indigo-500" },
+  { icon: "/Breast-Cancer.svg", name: "Breast Cancer", bg: "bg-pink-200", cardBg: "bg-gradient-to-br from-pink-50 to-rose-100 border-2 border-pink-300 hover:border-pink-500" },
+  { icon: "/Prostate-Cancer.svg", name: "Prostate Cancer", bg: "bg-blue-200", cardBg: "bg-gradient-to-br from-blue-50 to-sky-100 border-2 border-blue-300 hover:border-blue-500" },
+  { icon: "/Colorectal-Cancer.svg", name: "Colorectal Cancer", bg: "bg-orange-200", cardBg: "bg-gradient-to-br from-orange-50 to-amber-100 border-2 border-orange-300 hover:border-orange-500" },
+  { icon: "/Cervical-Cancer.svg", name: "Cervical Cancer", bg: "bg-purple-200", cardBg: "bg-gradient-to-br from-purple-50 to-violet-100 border-2 border-purple-300 hover:border-purple-500" },
+  { icon: "/Lung-Cancer.svg", name: "Lung Cancer", bg: "bg-teal-200", cardBg: "bg-gradient-to-br from-teal-50 to-cyan-100 border-2 border-teal-300 hover:border-teal-500" },
+  { icon: "/Blood-Cancers.svg", name: "Blood Cancers (Leukaemia, Lymphoma)", bg: "bg-red-200", cardBg: "bg-gradient-to-br from-red-50 to-rose-100 border-2 border-red-300 hover:border-red-500" },
+  { icon: "/Ovarian-Gynaecological-Cancers.svg", name: "Ovarian & Other Gynaecological Cancers", bg: "bg-indigo-200", cardBg: "bg-gradient-to-br from-indigo-50 to-purple-100 border-2 border-indigo-300 hover:border-indigo-500" },
 ];
 
 const CancerTypesSection = () => {
@@ -34,12 +33,12 @@ const CancerTypesSection = () => {
             <button
               key={i}
               onClick={scrollToForm}
-              className={`flex flex-col items-center gap-4 p-6 rounded-2xl bg-white border-2 ${t.border} shadow-md hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer group`}
+              className={`flex flex-col items-center gap-4 p-6 rounded-2xl ${t.cardBg} shadow-md hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer group`}
             >
               <div className={`w-14 h-14 rounded-2xl ${t.bg} flex items-center justify-center transition-transform group-hover:scale-110`}>
                 <Image src={t.icon} alt={t.name} width={36} height={36} className="object-contain" />
               </div>
-              <span className="text-sm font-bold text-foreground text-center leading-tight">{t.name}</span>
+              <span className="text-base font-bold text-foreground text-center leading-tight">{t.name}</span>
             </button>
           ))}
         </div>
