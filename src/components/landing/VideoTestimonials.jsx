@@ -5,15 +5,33 @@ import { Play, Star } from "lucide-react";
 const testimonials = [
   {
     id: "kA_19g5gu04",
-
+    patient: "Success Story: Global Care",
+    location: "Nigeria"
   },
   {
     id: "yseSeL9Mt0k",
-  
+    patient: "Cancer Victory Journey",
+    location: "Kenya"
   },
   {
     id: "J1KQqxqgCNg",
-
+    patient: "Trust in Indian Oncology",
+    location: "Ethiopia"
+  },
+  {
+    id: "PpPQtRerK4Q",
+    patient: "Expert Treatment Success",
+    location: "Tanzania"
+  },
+  {
+    id: "36YhoD4cmcA",
+    patient: "Advanced Medical Care",
+    location: "Ghana"
+  },
+  {
+    id: "zSWuMIzJnZY",
+    patient: "Compassionate Healing",
+    location: "Cameroon"
   }
 ];
 
@@ -50,7 +68,16 @@ const VideoTestimonials = () => {
                     allowFullScreen
                   ></iframe>
                 </div>
-                
+                <div className="p-5 space-y-1">
+                  <h4 className="font-bold text-foreground text-lg flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+                    {video.patient}
+                  </h4>
+                  <p className="text-sm text-muted-foreground font-medium flex items-center justify-between">
+                    <span>{video.location}</span>
+                    <span className="text-xs bg-secondary px-2 py-0.5 rounded text-primary font-bold">Verified Case</span>
+                  </p>
+                </div>
               </div>
             ))}
           </div>
