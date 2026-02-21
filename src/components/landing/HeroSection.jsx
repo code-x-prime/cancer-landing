@@ -1,9 +1,11 @@
 "use client";
 
-import { Shield, MessageCircle, Sparkles, Globe } from "lucide-react";
+import { Shield, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import LeadForm from "./LeadForm";
+import Logos from "./Logos";
+import DoctorsCarousel from "./DoctorsCarousel";
 
 const HeroSection = () => {
   const scrollToForm = () => {
@@ -13,6 +15,9 @@ const HeroSection = () => {
   return (
     <section className="gradient-hero py-10 lg:py-16">
       <div className="max-w-7xl mx-auto px-4">
+        <div className="mb-10">
+          <Logos/>
+        </div>
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-10 xl:gap-16 items-start">
           {/* Left Content */}
           <div className="order-2 lg:order-1 space-y-5 lg:space-y-6">
@@ -57,6 +62,8 @@ const HeroSection = () => {
                 Talk to a Care Expert
               </a>
             </div>
+
+            <DoctorsCarousel />
           </div>
 
           {/* Right Form */}

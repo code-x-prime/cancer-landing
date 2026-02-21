@@ -2,9 +2,9 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import Image from "next/image";
 
 const Footer = () => (
-  <footer className="bg-foreground text-background/80 py-12">
+  <footer className="bg-[#0E7490] text-background/80 py-12 border-t border-white/10">
     <div className="max-w-7xl mx-auto px-4">
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-3">
+      <div className="grid sm:grid-cols-2  gap-8 mb-3">
         <div>
           <div className="flex items-center">
             <Image src="/logo.png" alt="Panacea Medcare" width={128} height={128} className="w-52 h-auto object-contain brightness-0 invert" />
@@ -20,11 +20,7 @@ const Footer = () => (
             <p className="flex items-center gap-2"><MapPin size={14} /> New Delhi, India</p>
           </div>
         </div>
-        <div>
-          <h3 className="font-bold text-background mb-3">Office Hours</h3>
-          <p className="text-sm">Monday – Saturday: 9:00 AM – 7:00 PM IST</p>
-          <p className="text-sm mt-1">WhatsApp: Available 24/7</p>
-        </div>
+       
       </div>
 
       <div className="border-t border-background/20 pt-6 space-y-4">
