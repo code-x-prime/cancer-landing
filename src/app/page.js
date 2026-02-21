@@ -3,6 +3,7 @@
 import Header from '@/components/landing/Header';
 import HeroSection from '@/components/landing/HeroSection';
 import ProcessSection from '@/components/landing/ProcessSection';
+import VideoTestimonials from '@/components/landing/VideoTestimonials';
 import WhyIndiaSection from '@/components/landing/WhyIndiaSection';
 import CostSection from '@/components/landing/CostSection';
 import CancerTypesSection from '@/components/landing/CancerTypesSection';
@@ -21,6 +22,7 @@ export default function Home() {
       <main>
         <HeroSection />
         <ProcessSection />
+        <VideoTestimonials />
         <WhyIndiaSection />
         <CostSection />
         <CancerTypesSection />
