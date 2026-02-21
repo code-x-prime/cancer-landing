@@ -13,7 +13,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="gradient-hero py-10 lg:py-16">
+    <section className="gradient-hero pb-10 pt-3">
       <div className="max-w-7xl mx-auto px-4">
         <div className="mb-10">
           <Logos/>

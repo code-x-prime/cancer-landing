@@ -29,7 +29,7 @@ const CostSection = () => (
                     className="object-contain brightness-0 invert"
                   />
               </div>
-              <h3 className="font-bold text-lg">{c.title}</h3>
+              <h3 className="font-bold text-base">{c.title}</h3>
             </div>
             <div className="p-5 bg-card text-center">
               <p className="text-xl font-bold text-foreground">{c.range}</p>
