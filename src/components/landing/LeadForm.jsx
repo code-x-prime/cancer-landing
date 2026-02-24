@@ -177,7 +177,6 @@ const LeadForm = () => {
           <div className="flex items-start gap-2"><CheckCircle2 size={16} className="text-primary mt-0.5" /><span>Case is being reviewed by our specialists.</span></div>
           <div className="flex items-start gap-2"><CheckCircle2 size={16} className="text-primary mt-0.5" /><span>You will be contacted within 2 hours.</span></div>
         </div>
-        <p className="text-muted-foreground text-sm">You will receive your <strong>Pre-Screening Report</strong> within 2 hours via email or WhatsApp.</p>
         <Button onClick={() => window.open('https://wa.me/919958800961', '_blank')} className="w-full bg-whatsapp hover:bg-whatsapp/90 text-white">
           Chat on WhatsApp for Status
         </Button>
@@ -191,9 +190,14 @@ const LeadForm = () => {
     <div ref={topRef} className="glass rounded-2xl p-4 sm:p-6 shadow-2xl transition-all">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-bold text-foreground">Let&apos;s Help You</h3>
-          <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">Step {step} of {TOTAL_STEPS}</span>
+        <div className="flex justify-between items-center mb-3">
+          <div>
+            <h3 className="text-3xl font-extrabold bg-gradient-to-r from-primary to-teal-400 bg-clip-text text-transparent leading-tight">
+              Let&apos;s Help You
+            </h3>
+            <p className="text-xs text-muted-foreground mt-0.5">Get expert medical guidance — free consultation</p>
+          </div>
+          <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full flex-shrink-0">Step {step} of {TOTAL_STEPS}</span>
         </div>
         <Progress value={progress} className="h-2" />
       </div>

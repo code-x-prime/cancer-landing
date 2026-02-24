@@ -124,10 +124,7 @@ const Footer = () => (
       {/* Disclaimer */}
       <div className="border-t border-white/20 pt-8 space-y-3">
         <p className="text-xs leading-relaxed max-w-4xl mx-auto text-center text-white/60">
-          <strong className="text-white/80">Disclaimer:</strong> Panacea Medcare is a medical facilitation company and does not provide medical advice. AI-assisted pre-screening is used to organise medical information and support faster specialist review. All diagnoses and treatment decisions are made exclusively by licensed hospitals and doctors in India. Treatment costs are indicative and subject to medical evaluation.
-        </p>
-        <p className="text-xs leading-relaxed max-w-3xl mx-auto text-center text-white/50">
-          AI-assisted pre-screening is used only to organise medical information and support faster specialist review; all medical decisions are made by licensed doctors.
+          <strong className="text-white/80">Disclaimer:</strong> Panacea Medcare is a medical facilitation company and does not provide medical advice. All diagnoses and treatment decisions are made exclusively by licensed hospitals and doctors in India. Treatment costs are indicative and subject to medical evaluation.
         </p>
         <p className="text-xs text-center text-white/50 pt-1">
           © 2026 Panacea Medcare. All rights reserved.

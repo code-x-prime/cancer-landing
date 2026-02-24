@@ -18,17 +18,17 @@ const Header = () => {
             href="https://wa.me/919958800961"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-full md:rounded-lg bg-[#25D366] text-white text-sm font-bold hover:bg-[#20bd5c] transition-all shadow-md active:scale-95"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg bg-[#25D366] text-white text-sm font-bold hover:bg-[#20bd5c] transition-all shadow-md active:scale-95"
           >
             <Image src="/whatsapp.png" alt="WhatsApp" width={20} height={20} />
-            <span className="hidden md:block">Contact Us: +91 995 880 0961</span>
+            <span className="text-xs sm:text-sm">+91 995 880 0961</span>
           </a>
           
           <a
             href="https://panaceamedcare.com/services/teleconsultation"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#F97316] text-white text-sm font-bold hover:bg-[#ea630c] transition-all shadow-md active:scale-95"
+            className="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#F97316] text-white text-sm font-bold hover:bg-[#ea630c] transition-all shadow-md active:scale-95"
           >
             Free Consultation
           </a>

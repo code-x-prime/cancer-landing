@@ -115,44 +115,36 @@ const DoctorsCarousel = () => {
 
   return (
     <div className="w-full max-w-full overflow-hidden pt-6 pb-2">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4 px-1">
-        <div className="flex items-center gap-1.5">
-          <Stethoscope size={13} className="text-primary" />
-          <p className="text-[11px] uppercase tracking-widest font-bold text-primary/70">
-            Consult with India&apos;s Top Oncology Specialists
-          </p>
-        </div>
-        {/* Buttons */}
-        <div className="flex gap-2 flex-shrink-0">
-          <button
-            onClick={() => scroll("prev")}
-            className="w-8 h-8 rounded-full border border-border bg-background hover:bg-primary hover:text-white hover:border-primary transition-colors flex items-center justify-center shadow-sm"
-            aria-label="Previous"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <button
-            onClick={() => scroll("next")}
-            className="w-8 h-8 rounded-full border border-border bg-background hover:bg-primary hover:text-white hover:border-primary transition-colors flex items-center justify-center shadow-sm"
-            aria-label="Next"
-          >
-            <ChevronRight size={16} />
-          </button>
-        </div>
+      {/* Header — no buttons here now */}
+      <div className="flex items-center gap-1.5 mb-4 px-1">
+        <Stethoscope size={13} className="text-primary" />
+        <p className="text-[11px] uppercase tracking-widest font-bold text-primary/70">
+          Consult with India&apos;s Top Oncology Specialists
+        </p>
       </div>
 
-      {/* Scroll container */}
-      <div className="relative">
+      {/* Scroll row: button | cards | button */}
+      <div className="flex items-center ">
+
+        {/* Left arrow */}
+        <button
+          onClick={() => scroll("prev")}
+          className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white shadow-lg hover:bg-primary/80 active:scale-95 transition-all flex items-center justify-center border-2 border-white/60"
+          aria-label="Previous"
+        >
+          <ChevronLeft size={20} strokeWidth={2.5} />
+        </button>
+
+        {/* Cards */}
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex overflow-x-auto gap-3 pb-3"
+          className="flex-1 flex overflow-x-auto gap-3 pb-3"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {allDoctors.map((doc, i) => {
             const cardClass =
-              "group/card flex-shrink-0 w-[170px] lg:w-[200px] rounded-xl overflow-hidden bg-white border border-border/60 shadow-md hover:shadow-xl hover:border-primary/40 transition-all";
+              "group/card flex-shrink-0 w-[160px] lg:w-[190px] rounded-xl overflow-hidden bg-white border border-border/60 shadow-md hover:shadow-xl hover:border-primary/40 transition-all";
 
             const cardInner = (
               <>
@@ -195,8 +187,16 @@ const DoctorsCarousel = () => {
             );
           })}
         </div>
-        <div className="absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
-        <div className="absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
+
+        {/* Right arrow */}
+        <button
+          onClick={() => scroll("next")}
+          className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white shadow-lg hover:bg-primary/80 active:scale-95 transition-all flex items-center justify-center border-2 border-white/60"
+          aria-label="Next"
+        >
+          <ChevronRight size={20} strokeWidth={2.5} />
+        </button>
+
       </div>
     </div>
   );
