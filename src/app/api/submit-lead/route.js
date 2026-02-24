@@ -5,84 +5,82 @@ import { NextResponse } from "next/server";
 
 // Initialize R2 Client
 const r2 = new S3Client({
-    region: "auto",
-    endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-    credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY_ID,
-        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-    },
+  region: "auto",
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+  },
 });
 
 // Initialize Nodemailer Transporter
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-    },
+  host: process.env.SMTP_HOST,
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
+  },
 });
 
 export async function POST(req) {
-    try {
-        const formData = await req.formData();
+  try {
+    const formData = await req.formData();
 
-        // Extract fields
-        const name = formData.get("name");
-        const gender = formData.get("gender");
-        const dob = formData.get("dob");
-        const country = formData.get("country");
-        const city = formData.get("city") || "Not specified";
-        const whatsapp = formData.get("whatsapp");
-        const email = formData.get("email");
+    // Extract fields
+    const name = formData.get("name");
+    const gender = formData.get("gender");
+    const dob = formData.get("dob");
+    const country = formData.get("country");
+    const city = formData.get("city") || "Not specified";
+    const whatsapp = formData.get("whatsapp");
+    const email = formData.get("email");
 
-        // Medical Details
-        const concern = formData.get("concern");
-        const diagnosis = formData.get("diagnosis") || "Not specified";
-        const symptoms = formData.get("symptoms");
-        const duration = formData.get("duration") || "Not specified";
-        const previousTreatment = formData.get("previousTreatment");
-        const treatmentDetails = formData.get("treatmentDetails") || "None";
-        const existingConditions = formData.get("existingConditions") || "None";
+    // Medical Details
+    const concern = formData.get("concern") || "Not specified";
+    const diagnosis = formData.get("diagnosis") || "Not specified";
+    const symptoms = formData.get("symptoms") || "Not specified";
+    const duration = formData.get("duration") || "Not specified";
+    const previousTreatment = formData.get("previousTreatment") || "Not specified";
+    const treatmentDetails = formData.get("treatmentDetails") || "None";
+    const existingConditions = formData.get("existingConditions") || "None";
 
-        // Preferences
-        const preferredHospital = formData.get("preferredHospital") || "Any Top Hospital";
-        const budget = formData.get("budget") || "Not specified";
-        const travelReadiness = formData.get("travelReadiness") || "Not specified";
+    // Preferences
+    const preferredHospital = formData.get("preferredHospital") || "Any Top Hospital";
 
-        const file = formData.get("file");
+    const file = formData.get("file");
 
-        let fileUrl = "";
+    let fileUrl = "";
 
-        // Upload to R2 if file exists
-        if (file && file.size > 0) {
-            const buffer = Buffer.from(await file.arrayBuffer());
-            const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
-            const uploadFolder = process.env.UPLOAD_FOLDER || "medical-reports";
-            const key = `${uploadFolder}/${fileName}`;
+    // Upload to R2 if file exists
+    if (file && file.size > 0) {
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+      const uploadFolder = process.env.UPLOAD_FOLDER || "medical-reports";
+      const key = `${uploadFolder}/${fileName}`;
 
-            const upload = new Upload({
-                client: r2,
-                params: {
-                    Bucket: process.env.R2_BUCKET_NAME,
-                    Key: key,
-                    Body: buffer,
-                    ContentType: file.type,
-                },
-            });
+      const upload = new Upload({
+        client: r2,
+        params: {
+          Bucket: process.env.R2_BUCKET_NAME,
+          Key: key,
+          Body: buffer,
+          ContentType: file.type,
+        },
+      });
 
-            await upload.done();
-            fileUrl = `${process.env.R2_PUBLIC_URL}/${key}`;
-        }
+      await upload.done();
+      fileUrl = `${process.env.R2_PUBLIC_URL}/${key}`;
+    }
 
-        // Email to Admin
-        const adminMailOptions = {
-            from: `Panacea Medcare <${process.env.FROM_EMAIL}>`,
-            to: "care@panaceamedcare.com", // Admin email
-            subject: `AI Pre-Screening: ${name} (${country}) - ${concern}`,
-            html: `
-        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+    // Email to Admin
+    const adminMailOptions = {
+      from: `Panacea Medcare <${process.env.FROM_EMAIL}>`,
+      to: "care@panaceamedcare.com", // Admin email
+      subject: `New AI Pre-Screening Request: ${name} from ${country}`,
+      html: `
+      < div style = "font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;" >
           <div style="background-color: #0E7490; padding: 20px; color: white;">
             <h2 style="margin: 0;">New AI Pre-Screening Request</h2>
           </div>
@@ -106,26 +104,24 @@ export async function POST(req) {
 
             <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px; margin-top: 20px;">Preferences</h3>
             <p><strong>Preferred Hospital:</strong> ${preferredHospital}</p>
-            <p><strong>Budget Range:</strong> ${budget}</p>
-            <p><strong>Travel Readiness:</strong> ${travelReadiness}</p>
 
             <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px; margin-top: 20px;">Medical Report</h3>
             ${fileUrl ? `<p><a href="${fileUrl}" style="display: inline-block; background-color: #0E7490; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">View Uploaded Report</a></p><p style="font-size: 12px; color: #666; word-break: break-all;">Link: ${fileUrl}</p>` : "<p>No file uploaded.</p>"}
-          </div>
-          <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #888;">
-            Generated by Panacea Medcare AI Pre-Screening System
-          </div>
-        </div>
+          </div >
+      <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #888;">
+        Generated by Panacea Medcare AI Pre-Screening System
+      </div>
+        </div >
       `,
-        };
+    };
 
-        // Email to User
-        const userMailOptions = {
-            from: `Panacea Medcare <${process.env.FROM_EMAIL}>`,
-            to: email,
-            subject: "AI Pre-Screening in Progress - Panacea Medcare",
-            html: `
-        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+    // Email to User
+    const userMailOptions = {
+      from: `Panacea Medcare < ${process.env.FROM_EMAIL}> `,
+      to: email,
+      subject: "AI Pre-Screening in Progress - Panacea Medcare",
+      html: `
+      < div style = "font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;" >
           <div style="background-color: #0E7490; padding: 20px; color: white; text-align: center;">
             <h2 style="margin: 0;">AI Pre-Screening Started</h2>
           </div>
@@ -153,21 +149,21 @@ export async function POST(req) {
             Panacea Medcare | New Delhi, India<br/>
             <a href="https://panaceamedcare.com" style="color: #666;">www.panaceamedcare.com</a>
           </div>
-        </div>
+        </div >
       `,
-        };
+    };
 
-        // Send Emails
-        await Promise.all([
-            transporter.sendMail(adminMailOptions),
-            transporter.sendMail(userMailOptions),
-        ]);
+    // Send Emails
+    await Promise.all([
+      transporter.sendMail(adminMailOptions),
+      transporter.sendMail(userMailOptions),
+    ]);
 
-        return NextResponse.json({ success: true, message: "Lead submitted successfully" });
+    return NextResponse.json({ success: true, message: "Lead submitted successfully" });
 
-    } catch (error) {
-        console.error("Error submitting lead:", error);
-        return NextResponse.json({ success: false, error: "Failed to submit lead" }, { status: 500 });
-    }
+  } catch (error) {
+    console.error("Error submitting lead:", error);
+    return NextResponse.json({ success: false, error: "Failed to submit lead" }, { status: 500 });
+  }
 }
 

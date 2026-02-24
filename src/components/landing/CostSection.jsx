@@ -9,7 +9,7 @@ const costs = [
 
 const CostSection = () => (
   <section className="py-8 lg:py-12 bg-background">
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto px-2">
       <div className="text-center mb-12">
         <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
           Cancer Treatment Cost in India
@@ -17,7 +17,7 @@ const CostSection = () => (
         <p className="text-muted-foreground mt-2">Estimated Treatment Costs</p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-4 xl:gap-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-2">
         {costs.map((c, i) => (
           <div key={i} className="rounded-xl overflow-hidden shadow-lg border border-border group hover:shadow-xl transition-shadow">
             <div className={`bg-gradient-to-br ${c.color} p-5 text-primary-foreground text-center`}>
@@ -29,7 +29,7 @@ const CostSection = () => (
                     className="object-contain brightness-0 invert"
                   />
               </div>
-              <h3 className="font-bold text-base">{c.title}</h3>
+              <h3 className="font-semibold text-base">{c.title}</h3>
             </div>
             <div className="p-5 bg-card text-center">
               <p className="text-xl font-bold text-foreground">{c.range}</p>

@@ -32,6 +32,30 @@ const doctors = [
     title: "Chairman - Haemato Oncology & BMT",
     image: "/doctor/dharma-choudhary.jpg",
     link: "https://panaceamedcare.com/en/doctors/dharma-choudhary",
+  },
+  {
+    name: "Dr. Sameer Kaul",
+    title: "Sr. Consultant & Head – Surgical & Clinical Oncology, Apollo Delhi",
+    image: "/doctor/sameer-kaul.jpg",
+    link: "https://panaceamedcare.com/doctors/sameer-kaul-apollo",
+  },
+  {
+    name: "Dr. Manish Singhal",
+    title: "Head – Medical Oncology, Apollo Delhi",
+    image: "/doctor/manish-singhal.jpg",
+    link: "https://panaceamedcare.com/doctors/manish-singhal-apollo",
+  },
+  {
+    name: "Dr. Vinod Raina",
+    title: "Chairman – Oncosciences & Head, Medical Oncology",
+    image: "/doctor/Dr.-Vinod-Raina.jpg",
+    link: null,
+  },
+  {
+    name: "Dr. Vedant Kabra",
+    title: "Principal Director – Surgical Oncology, FMRI",
+    image: "/doctor/dr-vedant-kabra.png",
+    link: null,
   }
 ];
 
@@ -134,38 +158,47 @@ const DoctorsCarousel = () => {
           onTouchMove={handleTouchMove}
           onTouchEnd={() => setIsDragging(false)}
         >
-          {allDoctors.map((doc, i) => (
-            <a
-              key={i}
-              href={doc.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              draggable="false"
-              className="group/card flex-shrink-0 w-[130px] lg:w-[250px] rounded overflow-hidden bg-white border border-border/60 shadow-lg hover:shadow-xl hover:border-primary/40 transition-all mb-4"
-              onClick={(e) => {
-                // Prevent click if we were just dragging
-                if (isDragging) e.preventDefault();
-              }}
-            >
-              <div className="relative w-full aspect-[3/4] lg:aspect-[9/16] overflow-hidden bg-gradient-to-br from-primary/10 to-secondary pointer-events-none">
-                <Image
-                  src={doc.image}
-                  alt={doc.name}
-                  fill
-                  className="object-cover object-top group-hover/card:scale-105 transition-transform duration-500"
-                  draggable="false"
-                />
-              </div>
-
-              <div className="p-3 flex items-start justify-between gap-1 pointer-events-none">
-                <div className="min-w-0">
-                  <h4 className="text-[12px] font-extrabold text-foreground leading-tight line-clamp-1">{doc.name}</h4>
-                  <p className="text-[10px] text-muted-foreground leading-tight mt-0.5 line-clamp-2">{doc.title}</p>
+          {allDoctors.map((doc, i) => {
+            const cardClass = "group/card flex-shrink-0 w-[130px] lg:w-[250px] rounded overflow-hidden bg-white border border-border/60 shadow-lg hover:shadow-xl hover:border-primary/40 transition-all mb-4";
+            const cardInner = (
+              <>
+                <div className="relative w-full aspect-[3/4] overflow-hidden bg-gradient-to-br from-primary/10 to-secondary pointer-events-none">
+                  <Image
+                    src={doc.image}
+                    alt={doc.name}
+                    fill
+                    className="object-cover object-top group-hover/card:scale-105 transition-transform duration-500"
+                    draggable="false"
+                  />
                 </div>
-                <ExternalLink size={11} className="text-muted-foreground mt-0.5 flex-shrink-0" />
+                <div className="p-3 flex items-start justify-between gap-1 pointer-events-none">
+                  <div className="min-w-0">
+                    <h4 className="text-[12px] font-extrabold text-foreground leading-tight line-clamp-1">{doc.name}</h4>
+                    <p className="text-[10px] text-muted-foreground leading-tight mt-0.5 line-clamp-2">{doc.title}</p>
+                  </div>
+                  {doc.link && <ExternalLink size={11} className="text-muted-foreground mt-0.5 flex-shrink-0" />}
+                </div>
+              </>
+            );
+
+            return doc.link ? (
+              <a
+                key={i}
+                href={doc.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                draggable="false"
+                className={cardClass}
+                onClick={(e) => { if (isDragging) e.preventDefault(); }}
+              >
+                {cardInner}
+              </a>
+            ) : (
+              <div key={i} draggable="false" className={cardClass}>
+                {cardInner}
               </div>
-            </a>
-          ))}
+            );
+          })}
         </div>
 
         <div className="absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-background to-transparent pointer-events-none z-10"></div>
