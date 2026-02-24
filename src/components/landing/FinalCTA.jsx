@@ -11,7 +11,7 @@ const FinalCTA = () => {
     <section className="py-16 lg:py-20" style={{ background: "linear-gradient(0deg, #0a3d52 0%, #0e6374 40%, #0e7490 70%, #0a5f75 100%)" }}>
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-foreground mb-4">
-          Get a Free, Confidential Cancer Case Review
+          Get a Free, Confidential Cancer Case Review Now
         </h2>
         <div className="flex flex-wrap items-center justify-center gap-4 text-primary-foreground/80 text-sm mb-8">
           <span className="flex items-center gap-1.5"><Sparkles size={14} /> AI-assisted case pre-screening</span>

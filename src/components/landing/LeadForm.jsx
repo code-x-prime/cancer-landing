@@ -1,13 +1,12 @@
 "use client"
 import { useState, useRef, useEffect } from "react";
-import { CheckCircle2, Upload, Shield, UserCheck, ArrowRight, ArrowLeft, Info, Save } from "lucide-react";
+import { CheckCircle2, Upload, Shield, UserCheck, ArrowRight, ArrowLeft, Save } from "lucide-react";
 import { CountryCodeSelect } from "./CountryCodeSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
@@ -18,12 +17,7 @@ const africanCountries = [
   "Mozambique", "Zambia", "Angola", "Democratic Republic of Congo", "Other",
 ];
 
-const medicalConcerns = [
-  "Cancer (Oncology)", "Cardiac (Heart)", "Orthopedics (Bone/Joint)",
-  "Neurology (Brain/Spine)", "Transplant", "General Surgery", "Other"
-];
-
-const TOTAL_STEPS = 3;
+const TOTAL_STEPS = 2;
 
 const LeadForm = () => {
   const { toast } = useToast();
@@ -35,7 +29,6 @@ const LeadForm = () => {
   const topRef = useRef(null);
 
   const [formData, setFormData] = useState({
-    // Step 1: Patient Details
     name: "",
     gender: "",
     dob: "",
@@ -44,20 +37,10 @@ const LeadForm = () => {
     countryCode: "+91",
     phone: "",
     email: "",
-
-    // Step 2: Medical Condition + Upload + Preference
-    concern: "",
-    diagnosis: "",
     symptoms: "",
     duration: "",
     previousTreatment: "",
     treatmentDetails: "",
-    existingConditions: "",
-    preferredHospital: "",
-
-    // Step 3: Consent
-    consentData: false,
-    consentDisclaimer: false
   });
 
   // Load saved data on mount
@@ -111,21 +94,23 @@ const LeadForm = () => {
   const validateStep = (currentStep) => {
     const d = formData;
     if (currentStep === 1) {
-      if (!d.name || !d.gender || !d.dob || !d.country || !d.phone || !d.email) return false;
+      if (!d.name || !d.gender || !d.dob || !d.country) return false;
+      // At least one of email or phone must be provided
+      if (!d.phone && !d.email) return false;
     }
     if (currentStep === 2) {
       if (!formData.symptoms || !formData.previousTreatment) return false;
       if (formData.previousTreatment === "Yes" && !formData.treatmentDetails) return false;
-    }
-    if (currentStep === 3) {
-      if (!d.consentData || !d.consentDisclaimer) return false;
     }
     return true;
   };
 
   const nextStep = () => {
     if (!validateStep(step)) {
-      toast({ title: "Incomplete Details", description: "Please fill all mandatory fields.", variant: "destructive" });
+      const msg = step === 1 && !formData.phone && !formData.email
+        ? "Please provide at least WhatsApp number or Email."
+        : "Please fill all mandatory fields.";
+      toast({ title: "Incomplete Details", description: msg, variant: "destructive" });
       return;
     }
     setStep(prev => prev + 1);
@@ -139,8 +124,8 @@ const LeadForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateStep(3)) {
-      toast({ title: "Consent Required", description: "Please agree to the consent and disclaimer.", variant: "destructive" });
+    if (!validateStep(2)) {
+      toast({ title: "Incomplete Details", description: "Please fill all mandatory fields.", variant: "destructive" });
       return;
     }
 
@@ -153,7 +138,7 @@ const LeadForm = () => {
           data.append(key, formData[key]);
         }
       });
-      data.append("whatsapp", `${formData.countryCode} ${formData.phone}`);
+      data.append("whatsapp", formData.phone ? `${formData.countryCode} ${formData.phone}` : "");
 
       if (file) data.append("file", file);
 
@@ -166,12 +151,12 @@ const LeadForm = () => {
 
       if (result.success) {
         setSubmitted(true);
-        toast({ title: "Case submitted!", description: "AI Analysis in progress. Review in 2 hours." });
+        toast({ title: "Details submitted!", description: "Our team will contact you shortly." });
       } else {
         throw new Error(result.error || "Submission failed");
       }
     } catch (error) {
-      toast({ title: "Error", description: "Failed to submit form. Please try again.", variant: "destructive" });
+      toast({ title: "Error", description: "Failed to submit. Please try again.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -185,14 +170,14 @@ const LeadForm = () => {
         </div>
         <div>
           <h3 className="text-2xl font-bold text-foreground">Submission Successful!</h3>
-          <p className="text-lg text-primary font-medium mt-2">AI System is analyzing your case...</p>
+          <p className="text-lg text-primary font-medium mt-2">Our team is reviewing your case...</p>
         </div>
         <div className="bg-secondary/50 p-4 rounded-lg text-sm text-left space-y-2">
           <div className="flex items-start gap-2"><CheckCircle2 size={16} className="text-primary mt-0.5" /><span>Details received securely.</span></div>
-          <div className="flex items-start gap-2"><CheckCircle2 size={16} className="text-primary mt-0.5" /><span>Structuring medical data...</span></div>
-          <div className="flex items-start gap-2"><CheckCircle2 size={16} className="text-primary mt-0.5" /><span>Matching with specialist...</span></div>
+          <div className="flex items-start gap-2"><CheckCircle2 size={16} className="text-primary mt-0.5" /><span>Case is being reviewed by our specialists.</span></div>
+          <div className="flex items-start gap-2"><CheckCircle2 size={16} className="text-primary mt-0.5" /><span>You will be contacted within 2 hours.</span></div>
         </div>
-        <p className="text-muted-foreground text-sm">You will receive your <strong>AI Pre-Screening Report</strong> within 2 hours via email & WhatsApp.</p>
+        <p className="text-muted-foreground text-sm">You will receive your <strong>Pre-Screening Report</strong> within 2 hours via email or WhatsApp.</p>
         <Button onClick={() => window.open('https://wa.me/919958800961', '_blank')} className="w-full bg-whatsapp hover:bg-whatsapp/90 text-white">
           Chat on WhatsApp for Status
         </Button>
@@ -207,18 +192,15 @@ const LeadForm = () => {
       {/* Header */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-bold text-foreground">AI Pre-Screening</h3>
+          <h3 className="text-lg font-bold text-foreground">Let&apos;s Help You</h3>
           <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full">Step {step} of {TOTAL_STEPS}</span>
         </div>
         <Progress value={progress} className="h-2" />
-        <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">
-          <Info size={12} /> Takes ~5 minutes. AI Analysis provided in 2 hours.
-        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
 
-        {/* ── Step 1: Patient Basic Details ── */}
+        {/* ── Step 1: Patient Details ── */}
         {step === 1 && (
           <div className="space-y-4 animate-in slide-in-from-right duration-300">
             <h4 className="font-semibold text-foreground border-b pb-2">Patient Information</h4>
@@ -245,7 +227,7 @@ const LeadForm = () => {
                 </div>
               </div>
               <div>
-                <Label htmlFor="country" className="text-sm font-medium">Country of Residence *</Label>
+                <Label className="text-sm font-medium">Country of Residence *</Label>
                 <Select onValueChange={(v) => handleSelectChange("country", v)} value={formData.country}>
                   <SelectTrigger className="mt-1"><SelectValue placeholder="Select Country" /></SelectTrigger>
                   <SelectContent>
@@ -257,34 +239,37 @@ const LeadForm = () => {
                 <Label htmlFor="city" className="text-sm font-medium">City</Label>
                 <Input id="city" placeholder="Current city" value={formData.city} onChange={handleInputChange} className="mt-1" />
               </div>
+
+              {/* WhatsApp OR Email — at least one required */}
               <div>
-                <Label htmlFor="whatsapp" className="text-sm font-medium">WhatsApp Number *</Label>
+                <Label className="text-sm font-medium">WhatsApp Number <span className="text-muted-foreground font-normal">(or provide Email below)</span></Label>
                 <div className="flex gap-2 mt-1">
                   <CountryCodeSelect value={formData.countryCode} onChange={(code) => handleSelectChange("countryCode", code)} />
-                  <Input id="phone" required type="tel" placeholder="Mobile Number" value={formData.phone} onChange={handleInputChange} className="flex-1" />
+                  <Input id="phone" type="tel" placeholder="Mobile Number" value={formData.phone} onChange={handleInputChange} className="flex-1" />
                 </div>
               </div>
               <div>
-                <Label htmlFor="email" className="text-sm font-medium">Email Address *</Label>
-                <Input id="email" required type="email" placeholder="For report delivery" value={formData.email} onChange={handleInputChange} className="mt-1" />
+                <Label htmlFor="email" className="text-sm font-medium">Email Address <span className="text-muted-foreground font-normal">(or provide WhatsApp above)</span></Label>
+                <Input id="email" type="email" placeholder="For report delivery" value={formData.email} onChange={handleInputChange} className="mt-1" />
               </div>
+              {(!formData.phone && !formData.email) && (
+                <p className="text-xs text-destructive">* Please provide at least WhatsApp number or Email</p>
+              )}
             </div>
           </div>
         )}
 
-        {/* ── Step 2: Medical Details + Upload + Preference ── */}
+        {/* ── Step 2: Medical Details + Upload ── */}
         {step === 2 && (
           <div className="space-y-4 animate-in slide-in-from-right duration-300">
             <h4 className="font-semibold text-foreground border-b pb-2">Medical Details & Reports</h4>
             <div className="space-y-3">
 
-              {/* Symptoms */}
               <div>
                 <Label htmlFor="symptoms" className="text-sm font-medium">Symptoms Description *</Label>
                 <Textarea id="symptoms" required placeholder="Describe main symptoms..." value={formData.symptoms} onChange={handleInputChange} className="mt-1" />
               </div>
 
-              {/* Duration */}
               <div>
                 <Label className="text-sm font-medium">Duration of Symptoms</Label>
                 <Select onValueChange={(v) => handleSelectChange("duration", v)} value={formData.duration}>
@@ -298,7 +283,6 @@ const LeadForm = () => {
                 </Select>
               </div>
 
-              {/* Previous Treatment */}
               <div className="space-y-2">
                 <Label className="text-sm font-medium">Previous Treatment Taken? *</Label>
                 <RadioGroup onValueChange={(v) => handleSelectChange("previousTreatment", v)} value={formData.previousTreatment} className="flex gap-4">
@@ -320,43 +304,14 @@ const LeadForm = () => {
                 </div>
               )}
 
-              {/* Other Medical Conditions */}
-              <div>
-                <Label htmlFor="existingConditions" className="text-sm font-medium">Other Medical Conditions</Label>
-                <Input id="existingConditions" placeholder="Diabetes, Hypertension, etc." value={formData.existingConditions} onChange={handleInputChange} className="mt-1" />
-              </div>
-
-              {/* Preferred Hospital */}
-              <div>
-                <Label className="text-sm font-medium">Preferred Hospital (Optional)</Label>
-                <Select onValueChange={(v) => handleSelectChange("preferredHospital", v)} value={formData.preferredHospital}>
-                  <SelectTrigger className="mt-1"><SelectValue placeholder="Select Preference" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Any Top Hospital">Any Top Hospital (Recommended)</SelectItem>
-                    <SelectItem value="Apollo Hospitals">Apollo Hospitals</SelectItem>
-                    <SelectItem value="Fortis Healthcare">Fortis Healthcare</SelectItem>
-                    <SelectItem value="Max Healthcare">Max Healthcare</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* File Upload (25MB) */}
+              {/* File Upload */}
               <div>
                 <Label className="text-sm font-medium">Upload Medical Reports (Optional)</Label>
-                <div className="bg-primary/5 border border-primary/20 rounded-lg p-2 text-xs text-primary flex gap-2 mt-1 mb-2">
-                  <Info size={14} className="mt-0.5 flex-shrink-0" />
-                  <p>Uploading reports (PDF/JPG) improves AI accuracy by 40%.</p>
-                </div>
-                <label className="flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed border-primary/30 rounded-xl cursor-pointer hover:border-primary/60 transition-colors bg-secondary/30">
+                <label className="mt-2 flex flex-col items-center justify-center gap-2 p-4 border-2 border-dashed border-primary/30 rounded-xl cursor-pointer hover:border-primary/60 transition-colors bg-secondary/30">
                   <Upload size={28} className="text-primary" />
                   <span className="text-sm font-medium text-foreground">{fileName || "Click to upload reports"}</span>
                   <span className="text-xs text-muted-foreground">PDF, JPG, PNG, DOC (Max 25MB)</span>
-                  <input
-                    type="file"
-                    className="hidden"
-                    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                    onChange={handleFileChange}
-                  />
+                  <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onChange={handleFileChange} />
                 </label>
                 {fileName && <p className="text-xs text-green-600 mt-2 font-medium flex items-center gap-1"><CheckCircle2 size={12} /> {fileName} attached</p>}
               </div>
@@ -365,35 +320,7 @@ const LeadForm = () => {
           </div>
         )}
 
-        {/* ── Step 3: Consent & Submit ── */}
-        {step === 3 && (
-          <div className="space-y-4 animate-in slide-in-from-right duration-300">
-            <h4 className="font-semibold text-foreground border-b pb-2">Review & Consent</h4>
-            <div className="space-y-3">
-              <div className="pt-2 space-y-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="consentData" checked={formData.consentData} onCheckedChange={(c) => handleSelectChange("consentData", c)} />
-                  <div className="grid gap-1.5 leading-none">
-                    <Label htmlFor="consentData" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      I consent to the processing of my medical data for AI pre-screening.
-                    </Label>
-                    <p className="text-xs text-muted-foreground">Detailed in Privacy Policy</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="consentDisclaimer" checked={formData.consentDisclaimer} onCheckedChange={(c) => handleSelectChange("consentDisclaimer", c)} />
-                  <div className="grid gap-1.5 leading-none">
-                    <Label htmlFor="consentDisclaimer" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      I understand AI results are preliminary and do not replace a doctor&apos;s diagnosis.
-                    </Label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Navigation Buttons */}
+        {/* Navigation */}
         <div className="flex justify-between pt-4 gap-3">
           {step > 1 ? (
             <Button type="button" variant="outline" onClick={prevStep} className="flex-1">
@@ -413,7 +340,7 @@ const LeadForm = () => {
             </Button>
           ) : (
             <Button type="submit" disabled={isLoading} className="flex-1 bg-accent hover:bg-accent/90 text-white font-bold shadow-lg">
-              {isLoading ? "Submitting..." : "Submit for AI Analysis"}
+              {isLoading ? "Submitting..." : "Submit Now"}
             </Button>
           )}
         </div>

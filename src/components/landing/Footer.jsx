@@ -19,7 +19,7 @@ const Footer = () => (
             alt="Panacea Medcare"
             width={180}
             height={60}
-            className="h-auto object-contain brightness-0 invert"
+            className="h-auto object-contain bg-white p-2 rounded-lg"
           />
           <p className="text-sm text-white/75 leading-relaxed">
             Your trusted medical travel facilitator connecting African patients with India&apos;s best cancer specialists.
@@ -75,9 +75,7 @@ const Footer = () => (
                 <a href="https://wa.me/919958800961" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-white hover:text-white/80 block">
                   +91-9958800961
                 </a>
-                <a href="https://wa.me/919958800962" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-white hover:text-white/80 block">
-                  +91-9958800962
-                </a>
+               
                 <p className="text-xs text-white/50">Instant Response</p>
               </div>
             </div>

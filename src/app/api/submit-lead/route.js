@@ -17,7 +17,7 @@ const r2 = new S3Client({
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: 587,
-  secure: false, // true for 465, false for other ports
+  secure: false,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
@@ -28,26 +28,20 @@ export async function POST(req) {
   try {
     const formData = await req.formData();
 
-    // Extract fields
-    const name = formData.get("name");
-    const gender = formData.get("gender");
-    const dob = formData.get("dob");
-    const country = formData.get("country");
+    // Patient Details
+    const name = formData.get("name") || "";
+    const gender = formData.get("gender") || "";
+    const dob = formData.get("dob") || "";
+    const country = formData.get("country") || "";
     const city = formData.get("city") || "Not specified";
-    const whatsapp = formData.get("whatsapp");
-    const email = formData.get("email");
+    const whatsapp = formData.get("whatsapp") || "";
+    const email = formData.get("email") || "";
 
     // Medical Details
-    const concern = formData.get("concern") || "Not specified";
-    const diagnosis = formData.get("diagnosis") || "Not specified";
     const symptoms = formData.get("symptoms") || "Not specified";
     const duration = formData.get("duration") || "Not specified";
     const previousTreatment = formData.get("previousTreatment") || "Not specified";
     const treatmentDetails = formData.get("treatmentDetails") || "None";
-    const existingConditions = formData.get("existingConditions") || "None";
-
-    // Preferences
-    const preferredHospital = formData.get("preferredHospital") || "Any Top Hospital";
 
     const file = formData.get("file");
 
@@ -74,90 +68,85 @@ export async function POST(req) {
       fileUrl = `${process.env.R2_PUBLIC_URL}/${key}`;
     }
 
-    // Email to Admin
+    // ── Admin Email ──
     const adminMailOptions = {
       from: `Panacea Medcare <${process.env.FROM_EMAIL}>`,
-      to: "care@panaceamedcare.com", // Admin email
-      subject: `New AI Pre-Screening Request: ${name} from ${country}`,
+      to: "care@panaceamedcare.com",
+      subject: `New Case Request: ${name} from ${country}`,
       html: `
-      < div style = "font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;" >
+        <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
           <div style="background-color: #0E7490; padding: 20px; color: white;">
-            <h2 style="margin: 0;">New AI Pre-Screening Request</h2>
+            <h2 style="margin: 0;">New Case Submission</h2>
           </div>
-          
           <div style="padding: 20px;">
             <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px;">Patient Details</h3>
             <p><strong>Name:</strong> ${name}</p>
             <p><strong>Gender:</strong> ${gender} | <strong>DOB:</strong> ${dob}</p>
             <p><strong>Location:</strong> ${city}, ${country}</p>
-            <p><strong>WhatsApp:</strong> <a href="https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}">${whatsapp}</a></p>
-            <p><strong>Email:</strong> ${email}</p>
+            ${whatsapp ? `<p><strong>WhatsApp:</strong> <a href="https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}">${whatsapp}</a></p>` : ""}
+            ${email ? `<p><strong>Email:</strong> ${email}</p>` : ""}
 
-            <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px; margin-top: 20px;">Medical Condition</h3>
-            <p><strong>Primary Concern:</strong> ${concern}</p>
-            <p><strong>Specific Diagnosis:</strong> ${diagnosis}</p>
+            <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px; margin-top: 20px;">Medical Details</h3>
             <p><strong>Symptoms:</strong> ${symptoms}</p>
             <p><strong>Duration:</strong> ${duration}</p>
             <p><strong>Previous Treatment:</strong> ${previousTreatment}</p>
-            <p><strong>Treatment Details:</strong> ${treatmentDetails}</p>
-            <p><strong>Existing Conditions:</strong> ${existingConditions}</p>
-
-            <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px; margin-top: 20px;">Preferences</h3>
-            <p><strong>Preferred Hospital:</strong> ${preferredHospital}</p>
+            ${previousTreatment === "Yes" ? `<p><strong>Treatment Details:</strong> ${treatmentDetails}</p>` : ""}
 
             <h3 style="color: #0E7490; border-bottom: 2px solid #0E7490; padding-bottom: 5px; margin-top: 20px;">Medical Report</h3>
-            ${fileUrl ? `<p><a href="${fileUrl}" style="display: inline-block; background-color: #0E7490; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">View Uploaded Report</a></p><p style="font-size: 12px; color: #666; word-break: break-all;">Link: ${fileUrl}</p>` : "<p>No file uploaded.</p>"}
-          </div >
-      <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #888;">
-        Generated by Panacea Medcare AI Pre-Screening System
-      </div>
-        </div >
-      `,
-    };
-
-    // Email to User
-    const userMailOptions = {
-      from: `Panacea Medcare < ${process.env.FROM_EMAIL}> `,
-      to: email,
-      subject: "AI Pre-Screening in Progress - Panacea Medcare",
-      html: `
-      < div style = "font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;" >
-          <div style="background-color: #0E7490; padding: 20px; color: white; text-align: center;">
-            <h2 style="margin: 0;">AI Pre-Screening Started</h2>
-          </div>
-          <div style="padding: 30px;">
-            <p>Dear <strong>${name}</strong>,</p>
-            <p>Thank you for submitting your details for AI Pre-Screening.</p>
-            
-            <div style="background-color: #f0fdfa; border-left: 4px solid #0E7490; padding: 15px; margin: 20px 0;">
-              <p style="margin: 0; color: #0E7490; font-weight: bold;">Your case is now being analyzed.</p>
-            </div>
-
-            <p><strong>What Happens Next?</strong></p>
-            <ul>
-              <li>Our AI system is structuring your medical data.</li>
-              <li>A senior oncologist will review the AI insights for accuracy.</li>
-              <li>You will receive your <strong>Preliminary Assessment Report</strong> within 2 hours (during business hours) or by the next morning.</li>
-            </ul>
-
-            <p>If you have urgent questions, you can reply to this email or chat with us on WhatsApp:</p>
-            <p style="text-align: center; margin-top: 20px;">
-              <a href="https://wa.me/919958800961" style="background-color: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 25px; font-weight: bold;">Chat on WhatsApp</a>
-            </p>
+            ${fileUrl
+          ? `<p><a href="${fileUrl}" style="display: inline-block; background-color: #0E7490; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">View Uploaded Report</a></p><p style="font-size: 12px; color: #666; word-break: break-all;">Link: ${fileUrl}</p>`
+          : "<p>No file uploaded.</p>"}
           </div>
           <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #888;">
-            Panacea Medcare | New Delhi, India<br/>
-            <a href="https://panaceamedcare.com" style="color: #666;">www.panaceamedcare.com</a>
+            Panacea Medcare Case Management System
           </div>
-        </div >
+        </div>
       `,
     };
 
-    // Send Emails
-    await Promise.all([
-      transporter.sendMail(adminMailOptions),
-      transporter.sendMail(userMailOptions),
-    ]);
+    // ── User Confirmation Email (only if email provided) ──
+    const mailPromises = [transporter.sendMail(adminMailOptions)];
+
+    if (email) {
+      const userMailOptions = {
+        from: `Panacea Medcare <${process.env.FROM_EMAIL}>`,
+        to: email,
+        subject: "Case Received – Panacea Medcare",
+        html: `
+          <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+            <div style="background-color: #0E7490; padding: 20px; color: white; text-align: center;">
+              <h2 style="margin: 0;">Your Case Has Been Received</h2>
+            </div>
+            <div style="padding: 30px;">
+              <p>Dear <strong>${name}</strong>,</p>
+              <p>Thank you for reaching out to Panacea Medcare. We have received your details and our specialist team is reviewing your case.</p>
+
+              <div style="background-color: #f0fdfa; border-left: 4px solid #0E7490; padding: 15px; margin: 20px 0;">
+                <p style="margin: 0; color: #0E7490; font-weight: bold;">What happens next?</p>
+              </div>
+
+              <ul>
+                <li>Our medical team will review your submitted information.</li>
+                <li>A specialist will reach out within 2 hours (during business hours) or by next morning.</li>
+                <li>You will receive a personalised treatment plan overview.</li>
+              </ul>
+
+              <p>For urgent queries, chat with us on WhatsApp:</p>
+              <p style="text-align: center; margin-top: 20px;">
+                <a href="https://wa.me/919958800961" style="background-color: #25D366; color: white; padding: 12px 24px; text-decoration: none; border-radius: 25px; font-weight: bold;">Chat on WhatsApp</a>
+              </p>
+            </div>
+            <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #888;">
+              Panacea Medcare | Suite No. 402, Sector 38, Gurgaon – 122001, Delhi NCR, India<br/>
+              <a href="https://panaceamedcare.com" style="color: #666;">www.panaceamedcare.com</a>
+            </div>
+          </div>
+        `,
+      };
+      mailPromises.push(transporter.sendMail(userMailOptions));
+    }
+
+    await Promise.all(mailPromises);
 
     return NextResponse.json({ success: true, message: "Lead submitted successfully" });
 
@@ -166,4 +155,3 @@ export async function POST(req) {
     return NextResponse.json({ success: false, error: "Failed to submit lead" }, { status: 500 });
   }
 }
-
