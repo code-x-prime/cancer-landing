@@ -1,5 +1,6 @@
 import { Phone, MapPin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Footer = () => (
   <footer
@@ -14,13 +15,14 @@ const Footer = () => (
 
         {/* Col 1 – Brand */}
         <div className="space-y-4">
+          <Link href="/">
           <Image
             src="/logo.png"
             alt="Panacea Medcare"
             width={180}
             height={60}
             className="h-auto object-contain bg-white p-2 rounded-lg"
-          />
+          /></Link>
           <p className="text-sm text-white/75 leading-relaxed">
             Your trusted medical travel facilitator connecting African patients with India&apos;s best cancer specialists.
           </p>
@@ -126,9 +128,14 @@ const Footer = () => (
         <p className="text-xs leading-relaxed max-w-4xl mx-auto text-center text-white/60">
           <strong className="text-white/80">Disclaimer:</strong> Panacea Medcare is a medical facilitation company and does not provide medical advice. All diagnoses and treatment decisions are made exclusively by licensed hospitals and doctors in India. Treatment costs are indicative and subject to medical evaluation.
         </p>
-        <p className="text-xs text-center text-white/50 pt-1">
-          © 2026 Panacea Medcare. All rights reserved.
-        </p>
+        <div className="flex flex-col sm:flex-row justify-between items-center text-xs text-white/50 pt-1 border-t border-white/5 mt-4">
+          <p>
+            © 2026 Panacea Medcare. All rights reserved.
+          </p>
+          <a href="/privacy-policy" className="hover:text-white transition-colors mt-2 sm:mt-0">
+            Privacy Policy
+          </a>
+        </div>
       </div>
     </div>
   </footer>

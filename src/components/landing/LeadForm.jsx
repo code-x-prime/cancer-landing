@@ -41,6 +41,7 @@ const LeadForm = () => {
     duration: "",
     previousTreatment: "",
     treatmentDetails: "",
+    privacyAgreed: false,
   });
 
   // Load saved data on mount
@@ -101,15 +102,19 @@ const LeadForm = () => {
     if (currentStep === 2) {
       if (!formData.symptoms || !formData.previousTreatment) return false;
       if (formData.previousTreatment === "Yes" && !formData.treatmentDetails) return false;
+      if (!formData.privacyAgreed) return false;
     }
     return true;
   };
 
   const nextStep = () => {
     if (!validateStep(step)) {
-      const msg = step === 1 && !formData.phone && !formData.email
-        ? "Please provide at least WhatsApp number or Email."
-        : "Please fill all mandatory fields.";
+      let msg = "Please fill all mandatory fields.";
+      if (step === 1 && !formData.phone && !formData.email) {
+        msg = "Please provide at least WhatsApp number or Email.";
+      } else if (step === 2 && !formData.privacyAgreed) {
+        msg = "Please agree to the Privacy Policy to submit.";
+      }
       toast({ title: "Incomplete Details", description: msg, variant: "destructive" });
       return;
     }
@@ -125,7 +130,10 @@ const LeadForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateStep(2)) {
-      toast({ title: "Incomplete Details", description: "Please fill all mandatory fields.", variant: "destructive" });
+      const msg = !formData.privacyAgreed 
+        ? "Please agree to the Privacy Policy to submit."
+        : "Please fill all mandatory fields.";
+      toast({ title: "Incomplete Details", description: msg, variant: "destructive" });
       return;
     }
 
@@ -318,6 +326,20 @@ const LeadForm = () => {
                   <input type="file" className="hidden" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onChange={handleFileChange} />
                 </label>
                 {fileName && <p className="text-xs text-green-600 mt-2 font-medium flex items-center gap-1"><CheckCircle2 size={12} /> {fileName} attached</p>}
+              </div>
+
+              {/* Privacy Policy Checkbox */}
+              <div className="flex items-start gap-2 pt-2 border-t border-border mt-4">
+                <input 
+                  type="checkbox" 
+                  id="privacyAgreed" 
+                  checked={formData.privacyAgreed}
+                  onChange={(e) => handleSelectChange("privacyAgreed", e.target.checked)}
+                  className="mt-1 flex-shrink-0 cursor-pointer accent-primary w-4 h-4"
+                />
+                <Label htmlFor="privacyAgreed" className="text-sm font-medium text-foreground/80 leading-tight cursor-pointer">
+                  I agree to the <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Privacy Policy</a>
+                </Label>
               </div>
 
             </div>

@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 
 const Header = () => {
  
@@ -9,7 +10,9 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
         <div className="flex items-center">
           <div className="w-32 sm:w-48 h-auto relative">
+            <Link href="/">
             <Image src="/logo.png" alt="Panacea Medcare" className="w-full h-full object-contain" width={200} height={60} priority />
+            </Link>
           </div>
         </div>
 
