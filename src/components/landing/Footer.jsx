@@ -132,9 +132,9 @@ const Footer = () => (
           <p>
             © 2026 Panacea Medcare. All rights reserved.
           </p>
-          <a href="/privacy-policy" className="hover:text-white transition-colors mt-2 sm:mt-0">
+          <Link href="/privacy-policy" className="hover:text-white transition-colors mt-2 sm:mt-0">
             Privacy Policy
-          </a>
+          </Link>
         </div>
       </div>
     </div>
