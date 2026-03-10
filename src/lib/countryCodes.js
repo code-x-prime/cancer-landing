@@ -74,7 +74,6 @@ export const countryCodes = [
     { name: "Honduras", code: "+504", iso: "HN" },
     { name: "Hungary", code: "+36", iso: "HU" },
     { name: "Iceland", code: "+354", iso: "IS" },
-    { name: "India", code: "+91", iso: "IN" },
     { name: "Indonesia", code: "+62", iso: "ID" },
     { name: "Iran", code: "+98", iso: "IR" },
     { name: "Iraq", code: "+964", iso: "IQ" },

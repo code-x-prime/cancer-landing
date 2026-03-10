@@ -34,7 +34,7 @@ const LeadForm = () => {
     dob: "",
     country: "",
     city: "",
-    countryCode: "+91",
+    countryCode: "",
     phone: "",
     email: "",
     symptoms: "",
@@ -52,7 +52,6 @@ const LeadForm = () => {
         const parsedData = JSON.parse(savedData);
         if (parsedData.whatsapp && !parsedData.phone) {
           parsedData.phone = parsedData.whatsapp;
-          parsedData.countryCode = "+91";
         }
         setFormData(prev => ({ ...prev, ...parsedData }));
         toast({ title: "Welcome back!", description: "We've restored your progress." });
@@ -98,6 +97,8 @@ const LeadForm = () => {
       if (!d.name || !d.gender || !d.dob || !d.country) return false;
       // At least one of email or phone must be provided
       if (!d.phone && !d.email) return false;
+      // If phone provided, country code must be selected
+      if (d.phone && !d.countryCode) return false;
     }
     if (currentStep === 2) {
       if (!formData.symptoms || !formData.previousTreatment) return false;
@@ -112,6 +113,8 @@ const LeadForm = () => {
       let msg = "Please fill all mandatory fields.";
       if (step === 1 && !formData.phone && !formData.email) {
         msg = "Please provide at least WhatsApp number or Email.";
+      } else if (step === 1 && formData.phone && !formData.countryCode) {
+        msg = "Please select your country code for WhatsApp number.";
       } else if (step === 2 && !formData.privacyAgreed) {
         msg = "Please agree to the Privacy Policy to submit.";
       }
@@ -146,7 +149,7 @@ const LeadForm = () => {
           data.append(key, formData[key]);
         }
       });
-      data.append("whatsapp", formData.phone ? `${formData.countryCode} ${formData.phone}` : "");
+      data.append("whatsapp", (formData.phone && formData.countryCode) ? `${formData.countryCode} ${formData.phone}` : "");
 
       if (file) data.append("file", file);
 
@@ -266,6 +269,9 @@ const LeadForm = () => {
               </div>
               {(!formData.phone && !formData.email) && (
                 <p className="text-xs text-destructive">* Please provide at least WhatsApp number or Email</p>
+              )}
+              {(formData.phone && !formData.countryCode) && (
+                <p className="text-xs text-destructive">* Please select your country code</p>
               )}
             </div>
           </div>
