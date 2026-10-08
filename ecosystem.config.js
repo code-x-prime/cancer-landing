@@ -4,7 +4,7 @@ module.exports = {
             name: "cancer-landing",
             script: "npm",
             args: "start",
-            cwd: "/root/cancer-landing$",
+            cwd: "/root/cancer-landing",
 
             env: {
                 NODE_ENV: "production",
