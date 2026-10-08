@@ -2,9 +2,9 @@ module.exports = {
     apps: [
         {
             name: "cancer-landing",
-            script: "pnpm",
+            script: "npm",
             args: "start",
-            cwd: "/root/fence-craft",
+            cwd: "/root/cancer-landing$",
 
             env: {
                 NODE_ENV: "production",
