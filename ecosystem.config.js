@@ -2,9 +2,9 @@ module.exports = {
     apps: [
         {
             name: "cancer-landing",
-            script: "npm",
+            script: "/home/admin/.nvm/versions/node/v20.20.2/bin/npm",
             args: "start",
-            cwd: "/root/cancer-landing",
+            cwd: "/home/admin/cancer-landing",
 
             env: {
                 NODE_ENV: "production",
